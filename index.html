@@ -17,6 +17,11 @@
         .order-card-grid {
              grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
         }
+        .tab-btn.active {
+            border-bottom-color: #3b82f6;
+            color: #3b82f6;
+            font-weight: 600;
+        }
     </style>
 </head>
 <body class="bg-gray-100 text-gray-800">
@@ -27,20 +32,31 @@
             <div class="text-center">
                 <i class="fa-solid fa-store text-5xl text-blue-600"></i>
                 <h1 class="text-3xl font-bold mt-4">Kantin Digital Sekolah</h1>
-                <p class="text-gray-500">Silakan masuk untuk melanjutkan</p>
+                <p class="text-gray-500">Silakan masuk sesuai peran Anda</p>
             </div>
+            
+            <!-- Login Tabs -->
+            <div class="border-b border-gray-200">
+                <nav class="-mb-px flex space-x-6" id="login-tabs">
+                    <button data-role="student" class="tab-btn active py-4 px-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300">Siswa</button>
+                    <button data-role="seller" class="tab-btn py-4 px-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300">Penjual</button>
+                    <button data-role="admin" class="tab-btn py-4 px-1 border-b-2 border-transparent text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300">Admin</button>
+                </nav>
+            </div>
+
             <form id="login-form" class="space-y-6">
+                <input type="hidden" id="login-role" value="student">
                 <div>
                     <label for="username" class="text-sm font-medium">Username</label>
                     <input type="text" id="username" name="username" required
                         class="w-full px-4 py-2 mt-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        placeholder="Contoh: user">
+                        placeholder="Masukkan username Anda">
                 </div>
                 <div>
                     <label for="password" class="text-sm font-medium">Password</label>
                     <input type="password" id="password" name="password" required
                         class="w-full px-4 py-2 mt-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        placeholder="Contoh: user123">
+                        placeholder="Masukkan password Anda">
                 </div>
                  <p id="login-error" class="text-sm text-red-500 text-center hidden">Username atau password salah!</p>
                 <button type="submit"
@@ -48,11 +64,11 @@
                     Masuk
                 </button>
             </form>
-            <div class="text-xs text-gray-400 text-center">
-                <p>Gunakan akun:</p>
-                <p><b>Siswa:</b> user / user123</p>
-                <p><b>Penjual:</b> penjual / penjual123</p>
-                <p><b>Admin:</b> admin / admin123</p>
+             <div class="text-xs text-gray-400 text-center">
+                <p><b>Akun Demo:</b></p>
+                <p>Siswa: `user` / `user123`</p>
+                <p>Penjual: `penjual` / `penjual123`</p>
+                <p>Admin: `admin` / `admin123`</p>
             </div>
         </div>
     </div>
@@ -78,6 +94,7 @@
             <!-- Dashboard Admin -->
             <div id="admin-dashboard" class="hidden">
                 <h2 class="text-3xl font-bold mb-6">Dashboard Admin</h2>
+                 <!-- Stats -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     <div class="bg-white p-6 rounded-xl shadow-lg">
                         <h3 class="font-bold text-lg mb-2">Total Pengguna</h3>
@@ -92,6 +109,50 @@
                         <p id="admin-total-orders" class="text-3xl font-bold text-yellow-600"></p>
                     </div>
                 </div>
+                
+                <!-- User Management -->
+                <div id="user-management" class="mt-8 bg-white p-6 rounded-xl shadow-lg">
+                    <h3 class="font-bold text-xl mb-4">Kelola Pengguna</h3>
+                    <!-- Add User Form -->
+                    <form id="add-user-form" class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end mb-6 p-4 bg-gray-50 rounded-lg">
+                        <div class="md:col-span-1">
+                            <label for="new-username" class="text-sm font-medium">Username Baru</label>
+                            <input type="text" id="new-username" class="w-full mt-1 px-3 py-2 border rounded-lg" required>
+                        </div>
+                        <div class="md:col-span-1">
+                            <label for="new-password" class="text-sm font-medium">Password Baru</label>
+                            <input type="text" id="new-password" class="w-full mt-1 px-3 py-2 border rounded-lg" required>
+                        </div>
+                         <div class="md:col-span-1">
+                            <label for="new-role" class="text-sm font-medium">Peran</label>
+                            <select id="new-role" class="w-full mt-1 px-3 py-2 border rounded-lg bg-white">
+                                <option value="student">Siswa</option>
+                                <option value="seller">Penjual</option>
+                            </select>
+                        </div>
+                        <div class="md:col-span-1">
+                            <button type="submit" class="w-full py-2 font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-700">Tambah Pengguna</button>
+                        </div>
+                    </form>
+                    
+                    <!-- User List Table -->
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full bg-white">
+                            <thead class="bg-gray-200">
+                                <tr>
+                                    <th class="text-left py-3 px-4 uppercase font-semibold text-sm">Username</th>
+                                    <th class="text-left py-3 px-4 uppercase font-semibold text-sm">Peran</th>
+                                    <th class="text-left py-3 px-4 uppercase font-semibold text-sm">Password</th>
+                                    <th class="text-left py-3 px-4 uppercase font-semibold text-sm">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="user-list-table">
+                                <!-- User rows will be injected here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
                  <div class="mt-8 bg-white p-6 rounded-xl shadow-lg">
                     <h3 class="font-bold text-xl mb-4">Semua Pesanan</h3>
                     <div id="admin-orders-list" class="space-y-4"></div>
@@ -133,7 +194,7 @@
                 </div>
                  <div class="mt-8 bg-white p-6 rounded-xl shadow-lg">
                     <h3 class="font-bold text-xl mb-4">Daftar Menu Anda</h3>
-                    <div id="seller-menu-list" class="dashboard-grid gap-4"></div>
+                    <div id="seller-menu-list" class="dashboard-grid gap-6"></div>
                 </div>
             </div>
 
@@ -202,13 +263,16 @@ document.addEventListener('DOMContentLoaded', () => {
         users: {
             'user': { password: 'user123', role: 'student' },
             'penjual': { password: 'penjual123', role: 'seller' },
-            'admin': { password: 'admin123', role: 'admin' }
+            'admin': { password: 'admin123', role: 'admin' },
+            'budi': { password: 'budi123', role: 'student' },
+            'warungbuida': { password: 'ida123', role: 'seller' }
         },
         menu: [
             { id: 1, name: 'Nasi Goreng Spesial', price: 15000, stock: 20, image: 'https://placehold.co/600x400/f8b400/FFF?text=Nasi+Goreng', seller: 'penjual' },
             { id: 2, name: 'Mie Ayam Bakso', price: 12000, stock: 25, image: 'https://placehold.co/600x400/8B4513/FFF?text=Mie+Ayam', seller: 'penjual' },
             { id: 3, name: 'Soto Ayam Lamongan', price: 10000, stock: 15, image: 'https://placehold.co/600x400/FFD700/333?text=Soto+Ayam', seller: 'penjual' },
-            { id: 4, name: 'Es Teh Manis', price: 3000, stock: 50, image: 'https://placehold.co/600x400/00CED1/FFF?text=Es+Teh', seller: 'penjual' }
+            { id: 4, name: 'Es Teh Manis', price: 3000, stock: 50, image: 'https://placehold.co/600x400/00CED1/FFF?text=Es+Teh', seller: 'warungbuida' },
+            { id: 5, name: 'Ayam Geprek', price: 18000, stock: 30, image: 'https://placehold.co/600x400/DC143C/FFF?text=Ayam+Geprek', seller: 'warungbuida' }
         ],
         cart: {}, // { itemId: quantity }
         orders: [] // { id, user, items: [{...menuItem, quantity}], total, status, notes, deliveryOption }
@@ -219,6 +283,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const appContent = document.getElementById('app-content');
     const loginForm = document.getElementById('login-form');
     const loginError = document.getElementById('login-error');
+    const loginTabs = document.getElementById('login-tabs');
+    const loginRoleInput = document.getElementById('login-role');
     const logoutBtn = document.getElementById('logout-btn');
     const welcomeMessage = document.getElementById('welcome-message');
 
@@ -243,6 +309,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const adminTotalMenu = document.getElementById('admin-total-menu');
     const adminTotalOrders = document.getElementById('admin-total-orders');
     const adminOrdersList = document.getElementById('admin-orders-list');
+    const userListTable = document.getElementById('user-list-table');
+    const addUserForm = document.getElementById('add-user-form');
     
     // === RENDER FUNCTIONS ===
     const formatCurrency = (amount) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(amount);
@@ -290,7 +358,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <div class="p-4">
                     <h3 class="font-bold text-lg">${item.name}</h3>
                     <p class="text-blue-600 font-semibold">${formatCurrency(item.price)}</p>
-                    <p class="text-sm text-gray-500">Stok: ${item.stock}</p>
+                    <p class="text-sm text-gray-500">Stok: ${item.stock} | Penjual: ${item.seller}</p>
                     <button data-id="${item.id}" class="add-to-cart-btn w-full mt-3 py-2 font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-700 disabled:bg-gray-400" ${isOutOfStock ? 'disabled' : ''}>
                         ${isOutOfStock ? 'Stok Habis' : '<i class="fa-solid fa-cart-plus mr-2"></i>Tambah'}
                     </button>
@@ -425,12 +493,17 @@ document.addEventListener('DOMContentLoaded', () => {
             menuCard.innerHTML = `
                 <img src="${item.image}" class="w-full h-32 object-cover rounded-lg mb-2">
                 <h4 class="font-bold">${item.name}</h4>
-                <p class="text-sm text-blue-600 font-semibold">${formatCurrency(item.price)}</p>
-                <div class="mt-2 flex-grow">
-                     <label for="stock-${item.id}" class="text-xs">Update Stok:</label>
-                     <input type="number" id="stock-${item.id}" value="${item.stock}" class="w-full border rounded px-2 py-1 text-sm">
+                <div class="mt-2 flex-grow space-y-2">
+                     <div>
+                        <label for="price-${item.id}" class="text-xs font-medium">Harga (Rp)</label>
+                        <input type="number" id="price-${item.id}" value="${item.price}" class="w-full border rounded px-2 py-1 text-sm">
+                     </div>
+                     <div>
+                        <label for="stock-${item.id}" class="text-xs font-medium">Stok</label>
+                        <input type="number" id="stock-${item.id}" value="${item.stock}" class="w-full border rounded px-2 py-1 text-sm">
+                     </div>
                 </div>
-                <button data-id="${item.id}" class="update-stock-btn w-full mt-2 py-1 text-sm bg-yellow-500 text-white rounded-lg hover:bg-yellow-600">Update Stok</button>
+                <button data-id="${item.id}" class="update-menu-btn w-full mt-3 py-1.5 text-sm font-semibold bg-yellow-500 text-white rounded-lg hover:bg-yellow-600">Update Menu</button>
             `;
             sellerMenuList.appendChild(menuCard);
         });
@@ -444,35 +517,66 @@ document.addEventListener('DOMContentLoaded', () => {
         adminOrdersList.innerHTML = '';
         if (state.orders.length === 0) {
             adminOrdersList.innerHTML = '<p class="text-gray-500">Belum ada pesanan.</p>';
-            return;
-        }
-
-        [...state.orders].reverse().forEach(order => {
-             const statusColor = order.status === 'Selesai' ? 'bg-green-100 text-green-800' : (order.status === 'Diproses' ? 'bg-yellow-100 text-yellow-800' : 'bg-gray-100 text-gray-800');
-            const orderEl = document.createElement('div');
-            orderEl.className = 'bg-gray-50 p-3 rounded-lg';
-            orderEl.innerHTML = `
-                <div class="flex justify-between items-center">
-                    <div>
-                        <p class="font-bold">Pesanan #${order.id} oleh ${order.user}</p>
-                        <p class="text-xs text-gray-500">${new Date(order.timestamp).toLocaleString('id-ID')}</p>
+        } else {
+            [...state.orders].reverse().forEach(order => {
+                const statusColor = order.status === 'Selesai' ? 'bg-green-100 text-green-800' : (order.status === 'Diproses' ? 'bg-yellow-100 text-yellow-800' : 'bg-gray-100 text-gray-800');
+                const orderEl = document.createElement('div');
+                orderEl.className = 'bg-gray-50 p-3 rounded-lg';
+                orderEl.innerHTML = `
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <p class="font-bold">Pesanan #${order.id} oleh ${order.user}</p>
+                            <p class="text-xs text-gray-500">${new Date(order.timestamp).toLocaleString('id-ID')}</p>
+                        </div>
+                         <span class="text-xs font-bold px-2 py-1 rounded-full ${statusColor}">${order.status}</span>
                     </div>
-                     <span class="text-xs font-bold px-2 py-1 rounded-full ${statusColor}">${order.status}</span>
-                </div>
-                <p class="text-sm mt-1">Total: ${formatCurrency(order.total)}</p>
+                    <p class="text-sm mt-1">Total: ${formatCurrency(order.total)}</p>
+                `;
+                adminOrdersList.appendChild(orderEl);
+            });
+        }
+        renderUserManagement();
+    };
+
+    const renderUserManagement = () => {
+        userListTable.innerHTML = '';
+        for (const username in state.users) {
+            if (username === 'admin') continue; // Admin cannot manage their own account
+            const user = state.users[username];
+            const row = document.createElement('tr');
+            row.className = 'border-b';
+            row.innerHTML = `
+                <td class="py-3 px-4">${username}</td>
+                <td class="py-3 px-4 capitalize">${user.role}</td>
+                <td class="py-3 px-4">
+                    <input type="text" id="password-${username}" value="${user.password}" class="w-full border rounded px-2 py-1 text-sm">
+                </td>
+                <td class="py-3 px-4 flex space-x-2">
+                    <button data-username="${username}" class="update-user-btn text-sm py-1 px-3 bg-blue-500 text-white rounded hover:bg-blue-600">Update</button>
+                    <button data-username="${username}" class="delete-user-btn text-sm py-1 px-3 bg-red-500 text-white rounded hover:bg-red-600">Hapus</button>
+                </td>
             `;
-            adminOrdersList.appendChild(orderEl);
-        });
+            userListTable.appendChild(row);
+        }
     };
 
     // === EVENT LISTENERS & HANDLERS ===
+    loginTabs.addEventListener('click', (e) => {
+        if(e.target.matches('.tab-btn')) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            e.target.classList.add('active');
+            loginRoleInput.value = e.target.dataset.role;
+        }
+    });
+
     loginForm.addEventListener('submit', (e) => {
         e.preventDefault();
         const username = e.target.username.value;
         const password = e.target.password.value;
+        const role = loginRoleInput.value;
         const user = state.users[username];
 
-        if (user && user.password === password) {
+        if (user && user.password === password && user.role === role) {
             state.currentUser = { username, role: user.role };
             loginError.classList.add('hidden');
             render();
@@ -485,6 +589,10 @@ document.addEventListener('DOMContentLoaded', () => {
         state.currentUser = null;
         state.cart = {};
         loginForm.reset();
+        // Reset login tab to Siswa
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        document.querySelector('.tab-btn[data-role="student"]').classList.add('active');
+        loginRoleInput.value = 'student';
         render();
     });
 
@@ -530,7 +638,6 @@ document.addEventListener('DOMContentLoaded', () => {
             return { ...item, quantity };
         });
 
-        // Check stock before creating order
         for (const orderItem of orderItems) {
             const menuItem = state.menu.find(m => m.id === orderItem.id);
             if (menuItem.stock < orderItem.quantity) {
@@ -539,7 +646,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
         
-        // Decrease stock
         orderItems.forEach(orderItem => {
              const menuItem = state.menu.find(m => m.id === orderItem.id);
              menuItem.stock -= orderItem.quantity;
@@ -555,7 +661,7 @@ document.addEventListener('DOMContentLoaded', () => {
             user: state.currentUser.username,
             items: orderItems,
             total,
-            status: 'Diproses', // Status: Diproses, Selesai
+            status: 'Diproses',
             timestamp: new Date().toISOString(),
             notes,
             deliveryOption
@@ -565,7 +671,7 @@ document.addEventListener('DOMContentLoaded', () => {
         state.cart = {};
         document.getElementById('order-notes').value = '';
         alert(`Pesanan #${orderId} berhasil dibuat! Total pembayaran: ${formatCurrency(total)}.`);
-        renderStudentDashboard(); // Re-render student view to update menu stock and order history
+        renderStudentDashboard();
     });
 
     addMenuForm.addEventListener('submit', (e) => {
@@ -593,17 +699,62 @@ document.addEventListener('DOMContentLoaded', () => {
                 renderSellerDashboard();
             }
         }
-        if(e.target.classList.contains('update-stock-btn')) {
+        if(e.target.classList.contains('update-menu-btn')) {
             const menuId = e.target.dataset.id;
+            const newPrice = parseInt(document.getElementById(`price-${menuId}`).value);
             const newStock = parseInt(document.getElementById(`stock-${menuId}`).value);
             const menuItem = state.menu.find(m => m.id == menuId);
-            if(menuItem && newStock >= 0) {
+
+            if(menuItem && newStock >= 0 && newPrice >= 0) {
                 menuItem.stock = newStock;
-                alert(`${menuItem.name} stok berhasil diupdate!`);
+                menuItem.price = newPrice;
+                alert(`${menuItem.name} berhasil diupdate!`);
                 renderSellerDashboard();
             } else {
-                alert('Input stok tidak valid.');
+                alert('Input harga atau stok tidak valid.');
             }
+        }
+    });
+
+    adminDashboard.addEventListener('click', (e) => {
+        if (e.target.classList.contains('update-user-btn')) {
+            const username = e.target.dataset.username;
+            const newPassword = document.getElementById(`password-${username}`).value;
+            if (state.users[username] && newPassword) {
+                state.users[username].password = newPassword;
+                alert(`Password untuk ${username} berhasil diperbarui.`);
+                renderUserManagement();
+            }
+        }
+
+        if (e.target.classList.contains('delete-user-btn')) {
+            const username = e.target.dataset.username;
+            if (confirm(`Apakah Anda yakin ingin menghapus pengguna ${username}?`)) {
+                delete state.users[username];
+                alert(`Pengguna ${username} telah dihapus.`);
+                renderAdminDashboard();
+            }
+        }
+    });
+
+    addUserForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const username = document.getElementById('new-username').value;
+        const password = document.getElementById('new-password').value;
+        const role = document.getElementById('new-role').value;
+
+        if (state.users[username]) {
+            alert('Username sudah ada. Silakan gunakan username lain.');
+            return;
+        }
+
+        if (username && password) {
+            state.users[username] = { password, role };
+            alert(`Pengguna baru ${username} dengan peran ${role} berhasil ditambahkan.`);
+            addUserForm.reset();
+            renderAdminDashboard();
+        } else {
+            alert('Username dan password tidak boleh kosong.');
         }
     });
 
@@ -613,3 +764,4 @@ document.addEventListener('DOMContentLoaded', () => {
 </script>
 </body>
 </html>
+
